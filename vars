@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#### BEGIN DOCKER RUN VARIABLES
+
+# Name of the container
+APP_NAME=kibana
+# Docker Hub Username or internal registry (e.g. docker-registry.example.com:5000)
+REPO_NAME="myusername"
+# TCP port that the Docker host will expose the Kibana web interface on
+DOCKER_HOST_API_PORT=5601
+# Elasticsearch URL to use for queries
+ELASTICSEARCH_URL="http://host1.example.com:9200"
+
+#### END DOCKER RUN VARIABLES
+#### BEGIN FRAMEWORK VARIABLES
+  
+# Get an SHA sum of all files involved in building the image so the image can be tagged
+# this will provide assurance that any image with the same tag was built the same way. 
+SHASUM=`find . -type f \
+        -not -path "*/.git/*" \
+        -not -path "*.gitignore*" \
+        -not -path "*builds*" \
+        -not -path "*run.sh*" \
+        -exec shasum {} + | awk '{print $1}' | sort | shasum | cut -c1-4`
+  
+TAG="`date +%Y%m%d`-${SHASUM}"
+
+#### END FRAMEWORK VARIABLES
